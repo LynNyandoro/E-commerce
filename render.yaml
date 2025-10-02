@@ -7,15 +7,14 @@ services:
     nodeVersion: 18
     buildCommand: cd backend && npm install --production && cd ../frontend && npm install && npm run build
     startCommand: cd backend && npm start
+    healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV
         value: production
       - key: PORT
         value: 10000
       - key: MONGODB_URI
-        fromDatabase:
-          name: art-ecommerce-db
-          property: connectionString
+        value: your_mongodb_atlas_connection_string_here
       - key: JWT_SECRET
         generateValue: true
       - key: JWT_EXPIRE
@@ -23,7 +22,3 @@ services:
       - key: FRONTEND_URL
         value: https://art-ecommerce.onrender.com
 
-databases:
-  - name: art-ecommerce-db
-    databaseName: art_ecommerce
-    user: art_user
