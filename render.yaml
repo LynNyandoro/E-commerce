@@ -12,7 +12,9 @@ services:
       - key: PORT
         value: 10000
       - key: MONGODB_URI
-        value: mongodb+srv://username:password@cluster.mongodb.net/art_ecommerce?retryWrites=true&w=majority
+        fromDatabase:
+          name: art-ecommerce-db
+          property: connectionString
       - key: JWT_SECRET
         generateValue: true
       - key: JWT_EXPIRE
@@ -33,7 +35,9 @@ services:
       - key: PORT
         value: 10000
       - key: MONGODB_URI
-        value: mongodb+srv://username:password@cluster.mongodb.net/art_ecommerce?retryWrites=true&w=majority
+        fromDatabase:
+          name: art-ecommerce-db
+          property: connectionString
       - key: JWT_SECRET
         generateValue: true
       - key: JWT_EXPIRE
@@ -48,5 +52,7 @@ services:
       - key: REACT_APP_API_URL
         value: https://art-ecommerce-api.onrender.com/api
 
-# Note: This application uses MongoDB Atlas instead of Render's database
-# Set up MongoDB Atlas cluster and update MONGODB_URI with your connection string
+databases:
+  - name: art-ecommerce-db
+    databaseName: art_ecommerce
+    user: art_user

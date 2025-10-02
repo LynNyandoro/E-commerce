@@ -34,26 +34,27 @@ app.get('/api/health', (req, res) => {
   res.json({ message: 'Art E-commerce API is running!' });
 });
 
-// Serve static files from React app in production
-if (process.env.NODE_ENV === 'production') {
-  const path = require('path');
-  app.use(express.static(path.join(__dirname, '../frontend/build')));
-  
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
-  });
-}
-
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ message: 'Something went wrong!' });
 });
 
-// 404 handler
-app.use((req, res) => {
-  res.status(404).json({ message: 'Route not found' });
-});
+// Serve static files from React app in production
+if (process.env.NODE_ENV === 'production') {
+  const path = require('path');
+  app.use(express.static(path.join(__dirname, '../frontend/build')));
+  
+  // Catch all handler: send back React's index.html file for client-side routing
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
+  });
+} else {
+  // 404 handler for development
+  app.use((req, res) => {
+    res.status(404).json({ message: 'Route not found' });
+  });
+}
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {

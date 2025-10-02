@@ -9,23 +9,16 @@ This guide will help you deploy the Art E-commerce platform to Render.
 
 ## Deployment Steps
 
-### 1. Database Setup (MongoDB Atlas)
+### 1. Database Setup
 
-1. Go to [MongoDB Atlas](https://www.mongodb.com/atlas)
-2. Create a free account or sign in
-3. Create a new cluster:
-   - **Provider**: AWS (or your preference)
-   - **Region**: Choose closest to your users
-   - **Cluster Tier**: M0 (Free)
-4. Configure database access:
-   - Create a database user with username and password
-   - Note down the credentials
-5. Configure network access:
-   - Add IP address `0.0.0.0/0` to allow connections from anywhere (for Render)
-6. Get your connection string:
-   - Click "Connect" on your cluster
-   - Choose "Connect your application"
-   - Copy the connection string (it will look like: `mongodb+srv://username:password@cluster.mongodb.net/`)
+1. Go to [Render Dashboard](https://dashboard.render.com)
+2. Click "New" → "PostgreSQL"
+3. Configure:
+   - **Name**: `art-ecommerce-db`
+   - **Database**: `art_ecommerce`
+   - **User**: `art_user`
+   - **Plan**: Free
+4. Save the database and note the **External Database URL**
 
 ### 2. Backend API Deployment
 
@@ -42,12 +35,11 @@ This guide will help you deploy the Art E-commerce platform to Render.
    ```
    NODE_ENV=production
    PORT=10000
-   MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/art_ecommerce?retryWrites=true&w=majority
+   MONGODB_URI=<your_database_url_from_step_1>
    JWT_SECRET=<generate_a_strong_secret_key>
    JWT_EXPIRE=7d
    FRONTEND_URL=https://art-ecommerce-web.onrender.com
    ```
-   Replace `username`, `password`, and `cluster` with your actual MongoDB Atlas credentials.
 
 5. Deploy the service
 
@@ -89,12 +81,11 @@ If you prefer to deploy as a single service:
    ```
    NODE_ENV=production
    PORT=10000
-   MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/art_ecommerce?retryWrites=true&w=majority
+   MONGODB_URI=<your_database_url>
    JWT_SECRET=<generate_a_strong_secret_key>
    JWT_EXPIRE=7d
    FRONTEND_URL=https://your-service-name.onrender.com
    ```
-   Replace `username`, `password`, and `cluster` with your actual MongoDB Atlas credentials.
 
 ## Important Notes
 
@@ -131,10 +122,9 @@ If you prefer to deploy as a single service:
    - Check build logs for specific errors
 
 2. **Database Connection**:
-   - Verify MongoDB Atlas URI is correct and properly formatted
-   - Check MongoDB Atlas credentials and network access settings
-   - Ensure MongoDB Atlas cluster is running and accessible
-   - Make sure the connection string starts with `mongodb+srv://` or `mongodb://`
+   - Verify MongoDB URI is correct
+   - Check database credentials
+   - Ensure database is running
 
 3. **CORS Issues**:
    - Update CORS configuration in server.js
@@ -175,7 +165,7 @@ If you prefer to deploy as a single service:
 ```
 NODE_ENV=production
 PORT=10000
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/art_ecommerce?retryWrites=true&w=majority
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/art_ecommerce
 JWT_SECRET=your_very_secure_jwt_secret_key_here
 JWT_EXPIRE=7d
 FRONTEND_URL=https://your-frontend-url.onrender.com
