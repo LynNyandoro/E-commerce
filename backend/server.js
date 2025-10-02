@@ -20,7 +20,20 @@ app.use(express.urlencoded({ extended: true }));
 
 // MongoDB connection
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/art-ecommerce')
-.then(() => console.log('MongoDB connected successfully'))
+.then(() => {
+  console.log('MongoDB connected successfully');
+  // Seed database in production if needed
+  if (process.env.NODE_ENV === 'production') {
+    const { exec } = require('child_process');
+    exec('npm run seed', (error, stdout, stderr) => {
+      if (error) {
+        console.log('Database already seeded or seeding failed:', error.message);
+      } else {
+        console.log('Database seeded successfully');
+      }
+    });
+  }
+})
 .catch(err => console.error('MongoDB connection error:', err));
 
 // Routes
