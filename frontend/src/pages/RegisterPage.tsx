@@ -115,82 +115,16 @@ const RegisterPage: React.FC = () => {
             <VStack gap={6} align="stretch">
               <Box textAlign="center">
                 <Heading as="h1" size="xl" mb={2}>
-                  Create Account
+                  Sign Up Temporarily Disabled
                 </Heading>
                 <Text color="gray.600">
-                  Join our community of art lovers and collectors.
+                  We’re preparing for launch. Please use an existing account to sign in.
                 </Text>
               </Box>
-
-              <form onSubmit={handleSubmit}>
-                <VStack gap={4} align="stretch">
-                  <FormControl isInvalid={!!errors.name}>
-                    <FormLabel>Full Name</FormLabel>
-                    <Input
-                      type="text"
-                      name="name"
-                      value={credentials.name}
-                      onChange={handleChange}
-                      placeholder="Enter your full name"
-                    />
-                    <FormErrorMessage>{errors.name}</FormErrorMessage>
-                  </FormControl>
-
-                  <FormControl isInvalid={!!errors.email}>
-                    <FormLabel>Email Address</FormLabel>
-                    <Input
-                      type="email"
-                      name="email"
-                      value={credentials.email}
-                      onChange={handleChange}
-                      placeholder="Enter your email"
-                    />
-                    <FormErrorMessage>{errors.email}</FormErrorMessage>
-                  </FormControl>
-
-                  <FormControl isInvalid={!!errors.password}>
-                    <FormLabel>Password</FormLabel>
-                    <Input
-                      type="password"
-                      name="password"
-                      value={credentials.password}
-                      onChange={handleChange}
-                      placeholder="Create a password"
-                    />
-                    <FormErrorMessage>{errors.password}</FormErrorMessage>
-                  </FormControl>
-
-                  <FormControl isInvalid={!!errors.confirmPassword}>
-                    <FormLabel>Confirm Password</FormLabel>
-                    <Input
-                      type="password"
-                      name="confirmPassword"
-                      value={credentials.confirmPassword}
-                      onChange={handleChange}
-                      placeholder="Confirm your password"
-                    />
-                    <FormErrorMessage>{errors.confirmPassword}</FormErrorMessage>
-                  </FormControl>
-
-                  <Button
-                    type="submit"
-                    colorScheme="brand"
-                    size="lg"
-                    isLoading={isLoading}
-                    loadingText="Creating account..."
-                  >
-                    Create Account
-                  </Button>
-                </VStack>
-              </form>
-
               <Box textAlign="center">
-                <Text color="gray.600">
-                  Already have an account?{' '}
-                  <Link as={RouterLink} to="/login" color="brand.600">
-                    Sign in here
-                  </Link>
-                </Text>
+                <Button as={RouterLink} to="/login" colorScheme="brand" size="lg">
+                  Go to Sign In
+                </Button>
               </Box>
             </VStack>
           </CardBody>

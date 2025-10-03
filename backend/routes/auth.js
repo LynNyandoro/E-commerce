@@ -14,7 +14,7 @@ const generateToken = (id) => {
 };
 
 // @route   POST /api/auth/register
-// @desc    Register a new user
+// @desc    Register a new user (disabled in mock mode)
 // @access  Public
 router.post('/register', [
   body('name').trim().notEmpty().withMessage('Name is required'),
@@ -23,6 +23,10 @@ router.post('/register', [
   body('role').optional().isIn(['user', 'admin']).withMessage('Invalid role')
 ], async (req, res) => {
   try {
+    // In mock mode, block registration
+    if (!process.env.MONGO_URI) {
+      return res.status(400).json({ message: 'Registration is temporarily disabled' });
+    }
     // Check for validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -68,13 +72,29 @@ router.post('/register', [
 });
 
 // @route   POST /api/auth/login
-// @desc    Login user
+// @desc    Login user (supports mock mode)
 // @access  Public
 router.post('/login', [
   body('email').isEmail().withMessage('Please enter a valid email'),
   body('password').notEmpty().withMessage('Password is required')
 ], async (req, res) => {
   try {
+    // In mock mode, accept any credentials and return a mock user
+    if (!process.env.MONGO_URI) {
+      const token = jwt.sign({ id: 'mock-user-id' }, process.env.JWT_SECRET || 'mocksecret', {
+        expiresIn: '7d',
+      });
+      return res.json({
+        message: 'Login successful (mock mode)',
+        token,
+        user: {
+          id: 'mock-user-id',
+          name: process.env.MOCK_USER_NAME || 'Demo User',
+          email: process.env.MOCK_USER_EMAIL || 'demo@example.com',
+          role: 'user'
+        }
+      });
+    }
     // Check for validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
