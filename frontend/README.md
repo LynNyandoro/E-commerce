@@ -1,46 +1,53 @@
-# Getting Started with Create React App
+# Frontend Deployment
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This app is built with Create React App and supports runtime configuration for the API base URL using `public/env.js`.
 
-## Available Scripts
+## Scripts
 
-In the project directory, you can run:
+- `npm start`: Start dev server
+- `npm run build`: Build for production
 
-### `npm start`
+## Runtime configuration
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+At runtime, the app reads `window._env_.REACT_APP_API_URL` if present, then falls back to `process.env.REACT_APP_API_URL`. This allows you to swap API URLs without rebuilding.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+1) Copy the template to `public/env.js` and set your URL:
 
-### `npm test`
+```html
+<script src="/env.js"></script>
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```javascript
+// public/env.js
+window._env_ = {
+  REACT_APP_API_URL: "https://your-backend.example.com/api",
+};
+```
 
-### `npm run build`
+2) In development, you can also create a `.env` file with:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
+REACT_APP_API_URL=http://localhost:5000/api
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Deploy on Render (Static Site)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. Create a new Static Site on Render and connect this repo or a subdirectory (`frontend`).
+2. Build command: `npm install && npm run build`
+3. Publish directory: `build`
+4. Add a static file at `build/env.js` at deploy time. You can do this via a pre-publish script or by committing `public/env.js` with the correct value.
+5. Set custom headers or redirects as needed in Render settings.
 
-### `npm run eject`
+Environment to set:
+- `REACT_APP_API_URL` (optional if you supply `env.js`)
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Deploy on Vercel
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+1. Import project to Vercel (root or `frontend` as the project).
+2. Framework preset: Create React App
+3. Build command: `npm run build`
+4. Output directory: `build`
+5. Add Environment Variable `REACT_APP_API_URL` for each environment.
+6. Optionally, add an `env.js` file as described above for runtime overrides.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+After deployment, verify API calls by opening the browser console and ensuring requests go to your configured `REACT_APP_API_URL`.

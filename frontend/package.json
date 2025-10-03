@@ -29,8 +29,10 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "prestart": "node scripts/generate-env.js",
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "postbuild": "node scripts/generate-env.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
