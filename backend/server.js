@@ -9,9 +9,14 @@ dotenv.config();
 const app = express();
 
 // Middleware
-const allowedOrigin = process.env.CLIENT_URL || 'http://localhost:3000';
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  'https://e-commerce-liard-nine-92.vercel.app',
+  'http://localhost:3000'
+].filter(Boolean);
+
 app.use(cors({
-  origin: allowedOrigin,
+  origin: allowedOrigins,
   credentials: true
 }));
 app.use(express.json());
