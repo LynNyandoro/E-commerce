@@ -1,24 +1,34 @@
 # Deployment Guide for Art E-commerce Platform
 
-This guide will help you deploy the Art E-commerce platform to Render.
+This guide will help you deploy the Art E-commerce platform to Render. The app now supports **mock mode** for demo purposes without requiring a database.
 
 ## Prerequisites
 
 - GitHub repository with your code
 - Render account (free tier available)
+- MongoDB Atlas account (optional - for full functionality)
+
+## Deployment Options
+
+### Option 1: Quick Demo Deployment (No Database Required)
+
+Deploy immediately with mock data for demonstration purposes.
+
+### Option 2: Full Production Deployment (Database Required)
+
+Deploy with full functionality including user accounts, orders, and admin features.
 
 ## Deployment Steps
 
-### 1. Database Setup
+### 1. Database Setup (Optional for Demo Mode)
 
-1. Go to [Render Dashboard](https://dashboard.render.com)
-2. Click "New" → "PostgreSQL"
-3. Configure:
-   - **Name**: `art-ecommerce-db`
-   - **Database**: `art_ecommerce`
-   - **User**: `art_user`
-   - **Plan**: Free
-4. Save the database and note the **External Database URL**
+**For full functionality only:**
+
+1. Go to [MongoDB Atlas](https://cloud.mongodb.com)
+2. Create a new cluster
+3. Create a database user
+4. Add IP whitelist (0.0.0.0/0 for all IPs)
+5. Get the connection string
 
 ### 2. Backend API Deployment
 
@@ -31,14 +41,25 @@ This guide will help you deploy the Art E-commerce platform to Render.
    - **Start Command**: `cd backend && npm start`
    - **Plan**: Free
 
-4. **Environment Variables**:
+4. **Environment Variables** (choose one option):
+
+   **Option A: Demo Mode (No Database)**
    ```
    NODE_ENV=production
-   PORT=10000
-   MONGODB_URI=<your_database_url_from_step_1>
+   PORT=5000
    JWT_SECRET=<generate_a_strong_secret_key>
-   JWT_EXPIRE=7d
-   FRONTEND_URL=https://art-ecommerce-web.onrender.com
+   CLIENT_URL=https://art-ecommerce-web.onrender.com
+   MOCK_USER_NAME=Demo User
+   MOCK_USER_EMAIL=demo@example.com
+   ```
+
+   **Option B: Full Production (With Database)**
+   ```
+   NODE_ENV=production
+   PORT=5000
+   MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/art_ecommerce
+   JWT_SECRET=<generate_a_strong_secret_key>
+   CLIENT_URL=https://art-ecommerce-web.onrender.com
    ```
 
 5. Deploy the service
@@ -60,9 +81,11 @@ This guide will help you deploy the Art E-commerce platform to Render.
 
 5. Deploy the service
 
-### 4. Database Seeding
+**Note**: The frontend automatically generates `env.js` at build time from `REACT_APP_API_URL` for runtime configuration.
 
-After deployment, the backend will automatically seed the database with sample data through the `postinstall` script.
+### 4. Database Seeding (Production Mode Only)
+
+When using a real database (`MONGO_URI` is set), the backend will automatically seed the database with sample data through the `postinstall` script.
 
 ## Alternative: Single Service Deployment
 
@@ -106,11 +129,20 @@ If you prefer to deploy as a single service:
 
 ## Testing Deployment
 
-1. **Health Check**: Visit `https://your-api-url.onrender.com/api/health`
+1. **Health Check**: Visit `https://your-api-url.onrender.com/health`
 2. **Frontend**: Visit your frontend URL
-3. **Login**: Use admin credentials:
-   - Email: `admin@artgallery.com`
-   - Password: `admin123`
+
+### Demo Mode Testing
+- **Login**: Use any email/password combination
+- **Browse**: View demo artworks and artists
+- **Signup**: Temporarily disabled (shows "temporarily disabled" message)
+
+### Production Mode Testing
+- **Login**: Use seeded admin credentials:
+  - Email: `admin@artgallery.com`
+  - Password: `admin123`
+- **Signup**: Create new user accounts
+- **Admin**: Full admin dashboard access
 
 ## Troubleshooting
 
@@ -161,17 +193,28 @@ If you prefer to deploy as a single service:
 
 ## Environment Variables Reference
 
-### Backend (.env)
+### Backend Environment Variables
+
+**Demo Mode (No Database)**
 ```
 NODE_ENV=production
-PORT=10000
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/art_ecommerce
+PORT=5000
 JWT_SECRET=your_very_secure_jwt_secret_key_here
-JWT_EXPIRE=7d
-FRONTEND_URL=https://your-frontend-url.onrender.com
+CLIENT_URL=https://your-frontend-url.onrender.com
+MOCK_USER_NAME=Demo User
+MOCK_USER_EMAIL=demo@example.com
 ```
 
-### Frontend (.env)
+**Production Mode (With Database)**
+```
+NODE_ENV=production
+PORT=5000
+MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/art_ecommerce
+JWT_SECRET=your_very_secure_jwt_secret_key_here
+CLIENT_URL=https://your-frontend-url.onrender.com
+```
+
+### Frontend Environment Variables
 ```
 REACT_APP_API_URL=https://your-backend-url.onrender.com/api
 ```

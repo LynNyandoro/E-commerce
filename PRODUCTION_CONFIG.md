@@ -1,18 +1,44 @@
 # Production Configuration Guide
 
+## Deployment Modes
+
+The application supports two deployment modes:
+
+### Demo Mode (No Database Required)
+- Perfect for demonstrations and testing
+- Uses mock data for artworks and artists
+- Login accepts any credentials
+- Registration is disabled
+- No database setup required
+
+### Production Mode (Database Required)
+- Full functionality with user accounts
+- Real data persistence
+- Admin dashboard with full CRUD operations
+- User registration and authentication
+- Requires MongoDB Atlas setup
+
 ## Environment Variables Setup
 
 ### Backend Environment Variables (for Render)
 
-When deploying to Render, set these environment variables in your web service:
-
+**Demo Mode Configuration:**
 ```bash
 NODE_ENV=production
-PORT=10000
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/art_ecommerce
+PORT=5000
 JWT_SECRET=your_very_secure_jwt_secret_key_here_minimum_32_characters
-JWT_EXPIRE=7d
-FRONTEND_URL=https://art-ecommerce-web.onrender.com
+CLIENT_URL=https://art-ecommerce-web.onrender.com
+MOCK_USER_NAME=Demo User
+MOCK_USER_EMAIL=demo@example.com
+```
+
+**Production Mode Configuration:**
+```bash
+NODE_ENV=production
+PORT=5000
+MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/art_ecommerce
+JWT_SECRET=your_very_secure_jwt_secret_key_here_minimum_32_characters
+CLIENT_URL=https://art-ecommerce-web.onrender.com
 ```
 
 ### Frontend Environment Variables (for Render)
@@ -23,21 +49,28 @@ When deploying the frontend to Render, set these environment variables:
 REACT_APP_API_URL=https://art-ecommerce-api.onrender.com/api
 ```
 
+**Note**: The frontend automatically generates runtime configuration from this environment variable.
+
 ## Database Configuration
 
-### MongoDB Atlas Setup (Recommended)
+### MongoDB Atlas Setup (Production Mode Only)
+
+**Only required for production mode with full functionality:**
 
 1. Create a MongoDB Atlas account
-2. Create a new cluster
+2. Create a new cluster (M0 free tier is sufficient)
 3. Create a database user
-4. Whitelist Render's IP addresses (or use 0.0.0.0/0 for all IPs)
-5. Get the connection string and use it as MONGODB_URI
+4. Whitelist IP addresses (use 0.0.0.0/0 for all IPs or Render's IP ranges)
+5. Get the connection string and use it as MONGO_URI
 
 ### Connection String Format
 
 ```
 mongodb+srv://username:password@cluster.mongodb.net/database_name?retryWrites=true&w=majority
 ```
+
+### Demo Mode
+No database setup required. The application will automatically use mock data when MONGO_URI is not provided.
 
 ## Security Considerations
 
@@ -54,26 +87,28 @@ openssl rand -hex 64
 
 ### CORS Configuration
 
-The backend is configured to accept requests from:
+The backend uses `CLIENT_URL` environment variable for CORS configuration:
 - Development: `http://localhost:3000`
-- Production: Your frontend URL and Render's default URL
+- Production: Your frontend URL from `CLIENT_URL` environment variable
 
 ## Build Configuration
 
 ### Backend Build
 
-The backend uses a custom build script that:
-- Checks for required environment variables
-- Creates a production-ready dist directory
-- Copies necessary files for deployment
+The backend deployment:
+- Uses `index.js` as the entry point
+- Connects to MongoDB only if `MONGO_URI` is provided
+- Falls back to mock mode if no database connection
+- Provides health check at `/health`
 
 ### Frontend Build
 
 The frontend build process:
 1. Installs dependencies
-2. Runs `npm run build`
-3. Creates optimized production bundle
-4. Serves static files through Express in production
+2. Generates `env.js` from `REACT_APP_API_URL`
+3. Runs `npm run build`
+4. Creates optimized production bundle
+5. Includes runtime environment configuration
 
 ## Deployment Checklist
 
@@ -100,7 +135,7 @@ The frontend build process:
 
 The API provides a health check endpoint:
 ```
-GET /api/health
+GET /health
 ```
 
 Response:
