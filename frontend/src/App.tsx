@@ -14,6 +14,7 @@ import ArtistDetailPage from './pages/ArtistDetailPage';
 import CartPage from './pages/CartPage';
 import CheckoutPage from './pages/CheckoutPage';
 import OrdersPage from './pages/OrdersPage';
+import DemoOrdersPage from './pages/DemoOrdersPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
@@ -52,17 +53,9 @@ const AppContent: React.FC = () => {
               <Route path="/artists/:id" element={<ArtistDetailPage />} />
               <Route path="/cart" element={<CartPage />} />
               
-              {/* Protected Routes */}
-              <Route path="/orders" element={
-                <ProtectedRoute>
-                  <OrdersPage />
-                </ProtectedRoute>
-              } />
-              <Route path="/checkout" element={
-                <ProtectedRoute>
-                  <CheckoutPage />
-                </ProtectedRoute>
-              } />
+              {/* Demo Routes - No Authentication Required */}
+              <Route path="/orders" element={<DemoOrdersPage />} />
+              <Route path="/checkout" element={<CartPage />} />
               
               {/* Auth Routes */}
               <Route path="/login" element={<LoginPage />} />

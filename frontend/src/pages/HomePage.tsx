@@ -44,6 +44,9 @@ const HomePage: React.FC = () => {
             gap={8}
           >
             <Box flex="1" textAlign={{ base: 'center', md: 'left' }}>
+              <Badge colorScheme="green" mb={4} fontSize="sm" px={3} py={1}>
+                Demo Mode - No Login Required
+              </Badge>
               <Heading
                 as="h1"
                 size="2xl"

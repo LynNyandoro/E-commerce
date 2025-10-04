@@ -96,146 +96,26 @@ const Navbar: React.FC = () => {
             </Button>
           </RouterLink>
 
-          {isAuthenticated ? (
-            <Box position="relative">
+          {/* Demo Mode - No Authentication Required */}
+          <Stack direction={'row'} gap={4}>
+            <RouterLink to="/orders">
               <Button
-                rounded={'full'}
+                fontSize={'sm'}
+                fontWeight={400}
                 variant={'ghost'}
-                cursor={'pointer'}
-                minW={0}
-                onClick={onUserMenuOpen}
               >
-                <Text fontSize="sm" fontWeight="medium">
-                  {user?.name}
-                </Text>
+                My Orders
               </Button>
-              {isUserMenuOpen && (
-                <Box
-                  position="absolute"
-                  top="100%"
-                  right={0}
-                  mt={2}
-                  bg="white"
-                  _dark={{ bg: 'gray.800', borderColor: 'gray.700' }}
-                  borderRadius="md"
-                  boxShadow="lg"
-                  borderWidth="1px"
-                  borderStyle="solid"
-                  borderColor="gray.200"
-                  zIndex={1000}
-                  minW="200px"
-                >
-                  <VStack align="stretch" gap={0} p={2}>
-                    {user?.role === 'admin' ? (
-                      // Admin menu - only admin functions
-                      <>
-                        <Button
-                          variant="ghost"
-                          justifyContent="flex-start"
-                          onClick={() => {
-                            navigate('/admin');
-                            onUserMenuClose();
-                          }}
-                        >
-                          Admin Dashboard
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          justifyContent="flex-start"
-                          onClick={() => {
-                            navigate('/admin/artworks');
-                            onUserMenuClose();
-                          }}
-                        >
-                          Manage Artworks
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          justifyContent="flex-start"
-                          onClick={() => {
-                            navigate('/admin/artists');
-                            onUserMenuClose();
-                          }}
-                        >
-                          Manage Artists
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          justifyContent="flex-start"
-                          onClick={() => {
-                            navigate('/admin/orders');
-                            onUserMenuClose();
-                          }}
-                        >
-                          Manage Orders
-                        </Button>
-                      </>
-                    ) : (
-                      // Regular user menu
-                      <>
-                        <Button
-                          variant="ghost"
-                          justifyContent="flex-start"
-                          onClick={() => {
-                            navigate('/profile');
-                            onUserMenuClose();
-                          }}
-                        >
-                          Profile
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          justifyContent="flex-start"
-                          onClick={() => {
-                            navigate('/orders');
-                            onUserMenuClose();
-                          }}
-                        >
-                          My Orders
-                        </Button>
-                      </>
-                    )}
-                         <Divider />
-                    <Button
-                      variant="ghost"
-                      justifyContent="flex-start"
-                      onClick={() => {
-                        handleLogout();
-                        onUserMenuClose();
-                      }}
-                    >
-                      Logout
-                    </Button>
-                  </VStack>
-                </Box>
-              )}
-            </Box>
-          ) : (
-            <Stack direction={'row'} gap={4}>
-              <RouterLink to="/login">
-                <Button
-                  fontSize={'sm'}
-                  fontWeight={400}
-                  variant={'ghost'}
-                >
-                  Sign In
-                </Button>
-              </RouterLink>
-              <RouterLink to="/register">
-                <Button
-                  fontSize={'sm'}
-                  fontWeight={600}
-                  color={'white'}
-                  bg={'brand.600'}
-                  _hover={{
-                    bg: 'brand.700',
-                  }}
-                >
-                  Sign Up
-                </Button>
-              </RouterLink>
-            </Stack>
-          )}
+            </RouterLink>
+            <Button
+              fontSize={'sm'}
+              fontWeight={400}
+              variant={'ghost'}
+              color="green.600"
+            >
+              Demo Mode
+            </Button>
+          </Stack>
         </Flex>
       </Flex>
 
