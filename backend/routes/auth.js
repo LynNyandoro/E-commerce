@@ -23,10 +23,6 @@ router.post('/register', [
   body('role').optional().isIn(['user', 'admin']).withMessage('Invalid role')
 ], async (req, res) => {
   try {
-    // In mock mode, block registration
-    if (!process.env.MONGO_URI) {
-      return res.status(400).json({ message: 'Registration is temporarily disabled' });
-    }
     // Check for validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

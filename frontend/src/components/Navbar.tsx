@@ -221,7 +221,19 @@ const Navbar: React.FC = () => {
                   Sign In
                 </Button>
               </RouterLink>
-              {/* Sign Up temporarily disabled */}
+              <RouterLink to="/register">
+                <Button
+                  fontSize={'sm'}
+                  fontWeight={600}
+                  color={'white'}
+                  bg={'brand.600'}
+                  _hover={{
+                    bg: 'brand.700',
+                  }}
+                >
+                  Sign Up
+                </Button>
+              </RouterLink>
             </Stack>
           )}
         </Flex>
