@@ -8,28 +8,12 @@ dotenv.config();
 
 const app = express();
 
-// Middleware
-const allowedOrigins = [
-  process.env.CLIENT_URL,
-  'https://e-commerce-liard-nine-92.vercel.app',
-  'http://localhost:3000'
-].filter(Boolean);
-
+// Middleware - Allow all origins for now to fix CORS issue
 app.use(cors({
-  origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-    
-    if (allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      console.log('CORS blocked origin:', origin);
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+  origin: true, // Allow all origins temporarily
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin']
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
