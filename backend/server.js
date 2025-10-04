@@ -116,21 +116,10 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: 'Something went wrong!' });
 });
 
-// Serve static files from React app in production
-if (process.env.NODE_ENV === 'production') {
-  const path = require('path');
-  app.use(express.static(path.join(__dirname, '../frontend/build')));
-  
-  // Catch all handler: send back React's index.html file for client-side routing
-  app.use((req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
-  });
-} else {
-  // 404 handler for development
-  app.use((req, res) => {
-    res.status(404).json({ message: 'Route not found' });
-  });
-}
+// 404 handler for API routes
+app.use((req, res) => {
+  res.status(404).json({ message: 'Route not found' });
+});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
