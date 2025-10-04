@@ -154,7 +154,7 @@ const LoginPage: React.FC = () => {
 
               {/* Demo Credentials */}
               <Box p={4} bg="gray.50" borderRadius="md" fontSize="sm">
-                <Text fontWeight="bold" mb={2}>AdminDemo Credentials:</Text>
+                <Text fontWeight="bold" mb={2}>Admin Demo Credentials:</Text>
                 <Text>Admin: admin@artgallery.com / admin123</Text>
               </Box>
             </VStack>
